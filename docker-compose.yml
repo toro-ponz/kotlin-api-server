@@ -1,0 +1,24 @@
+version: '3'
+
+services:
+  mysql:
+    build: ./docker/mysql
+    container_name: kotlin-api-server-db
+    environment:
+      MYSQL_DATABASE: twitter
+      MYSQL_ROOT_PASSWORD: root
+      TZ: Asia/Tokyo
+    ports:
+      - 3306:3306
+    volumes:
+      - ./docker/mysql/lib:/var/lib/mysql
+
+  api:
+    build: .
+    container_name: kotlin-api-server-api
+    environment:
+      TZ: Asia/Tokyo
+    ports:
+      - 23451:8080
+    volumes:
+      - .:/tmp

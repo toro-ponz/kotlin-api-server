@@ -1,0 +1,33 @@
+# Ruby CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-ruby/ for more details
+#
+version: 2
+jobs:
+  build:
+    machine:
+      java:
+        version: openjdk8
+      timezone:
+        Asia/Tokyo
+      environment:
+        _JAVA_OPTIONS: "-Xms512m -Xmx1024m"
+        GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx1024m -XX:+HeapDumpOnOutOfMemoryError"'
+      post:
+        - sudo service postgresql stop
+
+    dependencies:
+      override:
+        - ./gradlew testClasses
+
+    database:
+      post:
+        - mysql -e 'create database twitter-ci;'
+        # マイグレーション
+
+    test:
+      override:
+        - ./gradlew test
+      post:
+        - mkdir -p $CIRCLE_TEST_REPORTS/junit/ && find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} $CIRCLE_TEST_REPORTS/junit/ \;:
+

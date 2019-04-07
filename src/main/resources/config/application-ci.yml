@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active: ci
+  datasource:
+    url: jdbc:mysql://localhost:3306/twitter-ci
+    username: root
+    password:
+    driverClassName: com.mysql.jdbc.Driver
